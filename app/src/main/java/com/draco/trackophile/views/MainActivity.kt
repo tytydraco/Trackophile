@@ -1,14 +1,18 @@
 package com.draco.trackophile.views
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.format.DateUtils
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.draco.trackophile.R
 import com.draco.trackophile.viewmodels.MainActivityViewModel
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 Glide
                     .with(this)
                     .load(it.thumbnail)
-                    .placeholder(R.drawable.ic_baseline_image_24)
+                    .placeholder(R.drawable.ic_baseline_account_circle_24)
                     .circleCrop()
                     .into(thumbnail)
             }

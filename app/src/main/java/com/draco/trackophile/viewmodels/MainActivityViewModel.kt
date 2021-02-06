@@ -1,7 +1,8 @@
 package com.draco.trackophile.viewmodels
 
 import android.app.Application
-import android.content.Intent
+import android.content.Context
+import android.os.PowerManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,10 +11,17 @@ import com.draco.trackophile.models.Track
 import com.draco.trackophile.utils.Downloader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+    companion object {
+        const val WAKELOCK_TAG = "Trackophile:Download"
+        const val WAKELOCK_TIMEOUT = 10 * 60 * 1000L
+    }
+
     val downloader = Downloader(application.applicationContext)
+    private val powerManager = application.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+
+    private val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG)
 
     private val _downloaderReady = MutableLiveData(false)
     val downloaderReady: LiveData<Boolean> = _downloaderReady
@@ -40,6 +48,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             return
 
         viewModelScope.launch(Dispatchers.IO) {
+            wakelock.acquire(WAKELOCK_TIMEOUT)
+
             val track = downloader.getTrack(url)
             _currentTrack.postValue(track)
 
@@ -49,6 +59,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             }
 
             _currentTrack.postValue(null)
+
+            wakelock.release()
         }
     }
 }
