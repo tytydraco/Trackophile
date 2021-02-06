@@ -1,0 +1,2 @@
+rootProject.name = "Trackophile"
+include ':app'

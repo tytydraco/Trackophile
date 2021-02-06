@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ProgressBar.Horizontal.Top"
+        android:id="@+id/progress" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/thumbnail_height"
+            style="@style/ImageView.Thumbnail"
+            android:id="@+id/thumbnail"
+            android:contentDescription="@string/thumbnail"
+            android:src="@drawable/ic_baseline_image_24" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Track.Title"
+            android:text="@string/default_title"
+            android:id="@+id/title" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Track.Uploader"
+            android:text="@string/default_uploader"
+            android:id="@+id/uploader" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Track.Misc"
+            android:id="@+id/misc" />
+    </LinearLayout>
+</RelativeLayout>

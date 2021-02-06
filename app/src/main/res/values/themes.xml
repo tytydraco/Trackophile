@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.Trackophile" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/pink</item>
+        <item name="colorSecondary">@color/pink</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+    </style>
+</resources>
