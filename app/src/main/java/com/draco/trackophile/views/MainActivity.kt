@@ -36,6 +36,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.downloaderReady.observe(this) {
             progress.isIndeterminate = !it
 
+            when (it) {
+                false -> {
+                    title.setText(R.string.first_launch_title)
+                    uploader.setText(R.string.first_launch_uploader)
+                }
+                true -> {
+                    title.setText(R.string.default_title)
+                    uploader.setText(R.string.default_uploader)
+                }
+            }
+
             if (it == true) {
                 if (intent?.action == Intent.ACTION_SEND) {
                     val url = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return@observe

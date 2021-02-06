@@ -4,6 +4,9 @@
     <string name="default_title">Processing</string>
     <string name="default_uploader">Just a moment…</string>
 
+    <string name="first_launch_title">Initializing Downloader</string>
+    <string name="first_launch_uploader">Subsequent launches will be quicker</string>
+
     <string name="error">Whoops, an exception occurred!</string>
     <string name="thumbnail">Thumbnail</string>
 </resources>
