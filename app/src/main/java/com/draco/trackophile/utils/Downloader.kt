@@ -1,7 +1,6 @@
 package com.draco.trackophile.utils
 
 import android.content.Context
-import android.icu.text.SimpleDateFormat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.draco.trackophile.models.Track
@@ -20,7 +19,7 @@ class Downloader(private val context: Context) {
         /**
          * YouTubeDL recognizable output format (appended to output location)
          */
-        const val OUTPUT_FORMAT = "%(uploader)s - %(title)s.%(ext)s"
+        const val OUTPUT_FORMAT = "%(creator)s - %(title)s.%(ext)s"
     }
 
     private val youtubeDL = YoutubeDL.getInstance()
@@ -33,7 +32,7 @@ class Downloader(private val context: Context) {
     val downloadProgress: LiveData<Float> = _downloadProgress
 
     /**
-     * Is the downloader busy
+     * Is the downloader doing work right now
      */
     private val _isBusy = MutableLiveData(false)
     val isBusy: LiveData<Boolean> = _isBusy
@@ -46,8 +45,14 @@ class Downloader(private val context: Context) {
     fun init() {
         youtubeDL.init(context)
         ffmpeg.init(context)
+
+        /* Update via internet */
+        youtubeDL.updateYoutubeDL(context)
     }
 
+    /**
+     * Return Track containing track info from URL
+     */
     fun getTrack(url: String): Track? {
         val info = try {
             youtubeDL.getInfo(url)

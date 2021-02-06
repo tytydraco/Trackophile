@@ -1,18 +1,14 @@
 package com.draco.trackophile.views
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.format.DateUtils
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.draco.trackophile.R
 import com.draco.trackophile.viewmodels.MainActivityViewModel
@@ -38,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         thumbnail = findViewById(R.id.thumbnail)
 
         viewModel.downloaderReady.observe(this) {
+            /* Load infinitely while updating downloader */
             progress.isIndeterminate = !it
 
             when (it) {
@@ -51,21 +48,24 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            /* Handle URL */
             if (it == true) {
                 if (intent?.action == Intent.ACTION_SEND) {
                     val url = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return@observe
                     viewModel.download(url)
                 }
+
+                /* Prevent re-download */
+                intent = null
             }
         }
 
+        /* Update progress bar */
         viewModel.downloader.downloadProgress.observe(this) {
             progress.progress = it.roundToInt()
-
-            if (it == 100f)
-                finishAffinity()
         }
 
+        /* Show current track information */
         viewModel.currentTrack.observe(this) {
             if (it != null) {
                 title.text = it.title
@@ -85,11 +85,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /* Panic on an error */
         viewModel.error.observe(this) {
             if (it != null) {
                 title.setText(R.string.error)
                 uploader.text = it
             }
+        }
+
+        /* Finish once no longer busy and downloader is ready */
+        viewModel.downloader.isBusy.observe(this) {
+            if (it == false && viewModel.downloaderReady.value == true)
+                finishAffinity()
         }
     }
 }

@@ -44,21 +44,22 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
      * Download an audio track by URL
      */
     fun download(url: String) {
+        /* Do not overlap downloads */
         if (downloader.isBusy.value == true)
             return
 
         viewModelScope.launch(Dispatchers.IO) {
             wakelock.acquire(WAKELOCK_TIMEOUT)
 
+            /* Update track info first */
             val track = downloader.getTrack(url)
             _currentTrack.postValue(track)
 
+            /* Download the track and post errors if they occur */
             downloader.downloadAudio(url)?.let {
                 _error.postValue(it)
                 _downloaderReady.postValue(false)
             }
-
-            _currentTrack.postValue(null)
 
             wakelock.release()
         }
