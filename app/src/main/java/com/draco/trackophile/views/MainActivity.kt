@@ -1,9 +1,7 @@
 package com.draco.trackophile.views
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -19,8 +17,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var progress: ProgressBar
     private lateinit var title: TextView
-    private lateinit var id: TextView
-    private lateinit var misc: TextView
     private lateinit var thumbnail: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         progress = findViewById(R.id.progress)
         title = findViewById(R.id.title)
-        id = findViewById(R.id.id)
-        misc = findViewById(R.id.misc)
         thumbnail = findViewById(R.id.thumbnail)
 
         viewModel.downloaderReady.observe(this) {
@@ -38,14 +32,8 @@ class MainActivity : AppCompatActivity() {
             progress.isIndeterminate = !it
 
             when (it) {
-                false -> {
-                    title.setText(R.string.first_launch_title)
-                    id.setText(R.string.first_launch_uploader)
-                }
-                true -> {
-                    title.setText(R.string.default_title)
-                    id.setText(R.string.default_uploader)
-                }
+                false -> title.setText(R.string.first_launch_title)
+                true -> title.setText(R.string.default_title)
             }
 
             /* Handle URL */
@@ -69,28 +57,19 @@ class MainActivity : AppCompatActivity() {
         viewModel.currentTrack.observe(this) {
             if (it != null) {
                 title.text = it.title
-                id.text = it.id
-
-                val time = DateUtils.formatElapsedTime(it.duration.toLong())
-
-                @SuppressLint("SetTextI18n")
-                misc.text = "$time / ${it.id}"
 
                 Glide
                     .with(this)
                     .load(it.thumbnail)
-                    .placeholder(R.drawable.ic_baseline_account_circle_24)
-                    .circleCrop()
+                    .placeholder(R.drawable.ic_baseline_music_note_24)
                     .into(thumbnail)
             }
         }
 
         /* Panic on an error */
         viewModel.error.observe(this) {
-            if (it != null) {
+            if (it != null)
                 title.setText(R.string.error)
-                id.text = it
-            }
         }
 
         /* Finish once no longer busy and downloader is ready */
