@@ -8,6 +8,7 @@ import com.yausername.ffmpeg.FFmpeg
 import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLException
 import com.yausername.youtubedl_android.YoutubeDLRequest
+import java.io.File
 
 class Downloader(private val context: Context) {
     companion object {
@@ -41,6 +42,16 @@ class Downloader(private val context: Context) {
      * Where downloads are stored
      */
     private val downloadsFolder = context.getExternalFilesDir("downloads")!!
+
+    /**
+     * Where archives are stored
+     */
+    private val archivesFolder = context.getExternalFilesDir("archives")!!
+
+    /**
+     * An archive of existing downloads as to not download multiple times
+     */
+    private val archive = File("${archivesFolder.absolutePath}/archive.txt")
 
     fun init() {
         youtubeDL.init(context)
@@ -82,9 +93,14 @@ class Downloader(private val context: Context) {
         val request = YoutubeDLRequest(url)
             .addOption("-x")
             .addOption("-i")
+            .addOption("-w")
             .addOption("--audio-format", AUDIO_FORMAT)
             .addOption("--audio-quality", 0)
+            .addOption("--embed-thumbnail")
             .addOption("--add-metadata")
+            .addOption("--match-filter", "!is_live")
+            .addOption("--no-post-overwrites")
+            .addOption("--download-archive", archive.absolutePath)
             .addOption("-o", "${downloadsFolder.absolutePath}/$OUTPUT_FORMAT")
 
         try {
