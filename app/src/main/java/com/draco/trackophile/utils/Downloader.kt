@@ -20,7 +20,7 @@ class Downloader(private val context: Context) {
         /**
          * YouTubeDL recognizable output format (appended to output location)
          */
-        const val OUTPUT_FORMAT = "%(creator)s - %(title)s.%(ext)s"
+        const val OUTPUT_FORMAT = "%(title)s ~ %(id)s.%(ext)s"
     }
 
     private val youtubeDL = YoutubeDL.getInstance()
@@ -91,14 +91,14 @@ class Downloader(private val context: Context) {
         _downloadProgress.postValue(0f)
 
         val request = YoutubeDLRequest(url)
-            .addOption("-x")
-            .addOption("-i")
-            .addOption("-w")
+            .addOption("--extract-audio")
+            .addOption("--ignore-errors")
             .addOption("--audio-format", AUDIO_FORMAT)
             .addOption("--audio-quality", 0)
             .addOption("--embed-thumbnail")
             .addOption("--add-metadata")
             .addOption("--match-filter", "!is_live")
+            .addOption("--no-overwrites")
             .addOption("--no-post-overwrites")
             .addOption("--download-archive", archive.absolutePath)
             .addOption("-o", "${downloadsFolder.absolutePath}/$OUTPUT_FORMAT")
