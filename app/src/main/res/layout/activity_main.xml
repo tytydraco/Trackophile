@@ -7,7 +7,6 @@
         android:layout_height="wrap_content"
         style="@style/ProgressBar.Horizontal.Top"
         android:id="@+id/progress" />
-
     <ImageView
         android:layout_width="@dimen/thumbnail_height"
         android:layout_height="@dimen/thumbnail_height"
@@ -28,13 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        style="@style/TextAppearance.Track.Uploader"
+        style="@style/TextAppearance.Track.ID"
         android:text="@string/default_uploader"
-        android:id="@+id/uploader" />
+        android:id="@+id/id" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/uploader"
+        android:layout_below="@id/id"
         style="@style/TextAppearance.Track.Misc"
         android:id="@+id/misc" />
 </RelativeLayout>

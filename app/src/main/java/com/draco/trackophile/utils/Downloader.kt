@@ -74,7 +74,6 @@ class Downloader(private val context: Context) {
 
         with (info) {
             return Track(
-                uploader,
                 title,
                 thumbnail,
                 duration,

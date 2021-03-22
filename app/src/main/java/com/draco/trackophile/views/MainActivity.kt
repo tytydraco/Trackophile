@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var progress: ProgressBar
     private lateinit var title: TextView
-    private lateinit var uploader: TextView
+    private lateinit var id: TextView
     private lateinit var misc: TextView
     private lateinit var thumbnail: ImageView
 
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         progress = findViewById(R.id.progress)
         title = findViewById(R.id.title)
-        uploader = findViewById(R.id.uploader)
+        id = findViewById(R.id.id)
         misc = findViewById(R.id.misc)
         thumbnail = findViewById(R.id.thumbnail)
 
@@ -40,11 +40,11 @@ class MainActivity : AppCompatActivity() {
             when (it) {
                 false -> {
                     title.setText(R.string.first_launch_title)
-                    uploader.setText(R.string.first_launch_uploader)
+                    id.setText(R.string.first_launch_uploader)
                 }
                 true -> {
                     title.setText(R.string.default_title)
-                    uploader.setText(R.string.default_uploader)
+                    id.setText(R.string.default_uploader)
                 }
             }
 
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.currentTrack.observe(this) {
             if (it != null) {
                 title.text = it.title
-                uploader.text = it.uploader
+                id.text = it.id
 
                 val time = DateUtils.formatElapsedTime(it.duration.toLong())
 
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.error.observe(this) {
             if (it != null) {
                 title.setText(R.string.error)
-                uploader.text = it
+                id.text = it
             }
         }
 

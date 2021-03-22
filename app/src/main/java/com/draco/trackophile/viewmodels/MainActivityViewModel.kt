@@ -52,8 +52,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             wakelock.acquire(WAKELOCK_TIMEOUT)
 
             /* Update track info first */
-            val track = downloader.getTrack(url)
-            _currentTrack.postValue(track)
+            downloader.getTrack(url)?.let {
+                _currentTrack.postValue(it)
+            }
 
             /* Download the track and post errors if they occur */
             downloader.downloadAudio(url)?.let {
