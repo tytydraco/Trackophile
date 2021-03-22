@@ -14,7 +14,7 @@ class Downloader(private val context: Context) {
         /**
          * Audio format extension
          */
-        const val AUDIO_FORMAT = "opus"
+        const val AUDIO_FORMAT = "mp3"
 
         /**
          * YouTubeDL recognizable output format (appended to output location)
