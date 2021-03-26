@@ -15,14 +15,14 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var progress: ProgressBar
-    private lateinit var title: TextView
+    private lateinit var status: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         progress = findViewById(R.id.progress)
-        title = findViewById(R.id.title)
+        status = findViewById(R.id.status)
 
         /* Update progress bar */
         viewModel.downloader.downloadProgress.observe(this) {
@@ -33,28 +33,28 @@ class MainActivity : AppCompatActivity() {
         /* Report error messages */
         viewModel.downloader.error.observe(this) {
             if (it != null)
-                title.text = it
+                status.text = it
         }
 
         /* Handle downloader states */
         viewModel.downloader.state.observe(this) {
             when (it!!) {
-                DownloaderState.INITIALIZING -> title.setText(R.string.state_initializing)
+                DownloaderState.INITIALIZING -> status.setText(R.string.state_initializing)
 
                 DownloaderState.READY -> {
-                    title.setText(R.string.state_ready)
+                    status.setText(R.string.state_ready)
                     intent?.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
                         viewModel.download(url)
                         intent = null
                     }
                 }
 
-                DownloaderState.PROCESSING -> title.setText(R.string.state_processing)
+                DownloaderState.PROCESSING -> status.setText(R.string.state_processing)
 
-                DownloaderState.DOWNLOADING -> title.setText(R.string.state_downloading)
+                DownloaderState.DOWNLOADING -> status.setText(R.string.state_downloading)
 
                 DownloaderState.COMPLETED -> {
-                    title.setText(R.string.state_completed)
+                    status.setText(R.string.state_completed)
                     finishAffinity()
                 }
             }
