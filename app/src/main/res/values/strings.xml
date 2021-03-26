@@ -9,4 +9,6 @@
 
     <string name="error">Whoops, an exception occurred!</string>
     <string name="thumbnail">Thumbnail</string>
+
+    <string name="oom">Low on memory, download may be too large!</string>
 </resources>

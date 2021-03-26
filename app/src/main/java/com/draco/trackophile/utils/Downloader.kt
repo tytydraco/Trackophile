@@ -3,7 +3,6 @@ package com.draco.trackophile.utils
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.draco.trackophile.models.Track
 import com.yausername.ffmpeg.FFmpeg
 import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLException
@@ -59,27 +58,6 @@ class Downloader(private val context: Context) {
 
         /* Update via internet */
         youtubeDL.updateYoutubeDL(context)
-    }
-
-    /**
-     * Return Track containing track info from URL
-     */
-    fun getTrack(url: String): Track? {
-        val info = try {
-            youtubeDL.getInfo(url)
-        } catch (e: YoutubeDLException) {
-            e.printStackTrace()
-            return null
-        }
-
-        with (info) {
-            return Track(
-                title,
-                thumbnail,
-                duration,
-                id
-            )
-        }
     }
 
     /**

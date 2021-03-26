@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.draco.trackophile.R
 import com.draco.trackophile.viewmodels.MainActivityViewModel
 import kotlin.math.roundToInt
@@ -53,19 +53,6 @@ class MainActivity : AppCompatActivity() {
             progress.progress = it.roundToInt()
         }
 
-        /* Show current track information */
-        viewModel.currentTrack.observe(this) {
-            if (it != null) {
-                title.text = it.title
-
-                Glide
-                    .with(this)
-                    .load(it.thumbnail)
-                    .placeholder(R.drawable.ic_baseline_music_note_24)
-                    .into(thumbnail)
-            }
-        }
-
         /* Panic on an error */
         viewModel.error.observe(this) {
             if (it != null)
@@ -77,5 +64,10 @@ class MainActivity : AppCompatActivity() {
             if (it == false && viewModel.downloaderReady.value == true)
                 finishAffinity()
         }
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        Toast.makeText(this, R.string.oom, Toast.LENGTH_LONG).show()
     }
 }

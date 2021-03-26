@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Trackophile" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">?colorSurface</item>
-        <item name="colorSecondary">?colorSurface</item>
+        <item name="colorSecondary">@color/pink</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">true</item>

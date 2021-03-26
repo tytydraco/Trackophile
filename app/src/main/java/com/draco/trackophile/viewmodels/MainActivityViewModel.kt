@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.draco.trackophile.models.Track
 import com.draco.trackophile.utils.Downloader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,9 +24,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val _downloaderReady = MutableLiveData(false)
     val downloaderReady: LiveData<Boolean> = _downloaderReady
-
-    private val _currentTrack = MutableLiveData<Track>(null)
-    val currentTrack: LiveData<Track?> = _currentTrack
 
     private val _error = MutableLiveData<String>(null)
     val error: LiveData<String> = _error
@@ -50,11 +46,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
         viewModelScope.launch(Dispatchers.IO) {
             wakelock.acquire(WAKELOCK_TIMEOUT)
-
-            /* Update track info first */
-            downloader.getTrack(url)?.let {
-                _currentTrack.postValue(it)
-            }
 
             /* Download the track and post errors if they occur */
             downloader.downloadAudio(url)?.let {
