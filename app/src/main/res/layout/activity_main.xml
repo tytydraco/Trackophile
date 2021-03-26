@@ -7,21 +7,11 @@
         android:layout_height="wrap_content"
         style="@style/ProgressBar.Horizontal.Top"
         android:id="@+id/progress" />
-    <ImageView
-        android:layout_width="@dimen/thumbnail_height"
-        android:layout_height="@dimen/thumbnail_height"
-        android:layout_centerInParent="true"
-        style="@style/ImageView.Thumbnail"
-        android:id="@+id/thumbnail"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/thumbnail"
-        android:src="@drawable/ic_baseline_music_note_24" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         style="@style/TextAppearance.Track.Title"
-        android:layout_above="@id/thumbnail"
-        android:text="@string/default_title"
+        android:text="@string/state_initializing"
         android:id="@+id/title" />
 </RelativeLayout>

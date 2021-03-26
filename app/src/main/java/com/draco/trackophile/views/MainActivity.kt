@@ -2,13 +2,12 @@ package com.draco.trackophile.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.draco.trackophile.R
+import com.draco.trackophile.models.DownloaderState
 import com.draco.trackophile.viewmodels.MainActivityViewModel
 import kotlin.math.roundToInt
 
@@ -17,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var progress: ProgressBar
     private lateinit var title: TextView
-    private lateinit var thumbnail: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,49 +23,41 @@ class MainActivity : AppCompatActivity() {
 
         progress = findViewById(R.id.progress)
         title = findViewById(R.id.title)
-        thumbnail = findViewById(R.id.thumbnail)
-
-        viewModel.downloaderReady.observe(this) {
-            /* Load infinitely while updating downloader */
-            progress.isIndeterminate = !it
-
-            when (it) {
-                false -> title.setText(R.string.first_launch_title)
-                true -> title.setText(R.string.default_title)
-            }
-
-            /* Handle URL */
-            if (it == true) {
-                if (intent?.action == Intent.ACTION_SEND) {
-                    val url = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return@observe
-                    viewModel.download(url)
-                }
-
-                /* Prevent re-download */
-                intent = null
-            }
-        }
 
         /* Update progress bar */
         viewModel.downloader.downloadProgress.observe(this) {
+            progress.isIndeterminate = (it == 0f || it == 100f)
             progress.progress = it.roundToInt()
         }
 
-        /* Panic on an error */
-        viewModel.error.observe(this) {
+        /* Report error messages */
+        viewModel.downloader.error.observe(this) {
             if (it != null)
-                title.setText(R.string.error)
+                title.text = it
         }
 
-        /* Finish once no longer busy and downloader is ready */
-        viewModel.downloader.isBusy.observe(this) {
-            if (it == false && viewModel.downloaderReady.value == true)
-                finishAffinity()
-        }
-    }
+        /* Handle downloader states */
+        viewModel.downloader.state.observe(this) {
+            when (it!!) {
+                DownloaderState.INITIALIZING -> title.setText(R.string.state_initializing)
 
-    override fun onLowMemory() {
-        super.onLowMemory()
-        Toast.makeText(this, R.string.oom, Toast.LENGTH_LONG).show()
+                DownloaderState.READY -> {
+                    title.setText(R.string.state_ready)
+                    intent?.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
+                        viewModel.download(url)
+                        intent = null
+                    }
+                }
+
+                DownloaderState.PROCESSING -> title.setText(R.string.state_processing)
+
+                DownloaderState.DOWNLOADING -> title.setText(R.string.state_downloading)
+
+                DownloaderState.COMPLETED -> {
+                    title.setText(R.string.state_completed)
+                    finishAffinity()
+                }
+            }
+        }
     }
 }

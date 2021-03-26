@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.draco.trackophile.models.DownloaderState
 import com.draco.trackophile.utils.Downloader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,17 +23,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG)
 
-    private val _downloaderReady = MutableLiveData(false)
-    val downloaderReady: LiveData<Boolean> = _downloaderReady
-
-    private val _error = MutableLiveData<String>(null)
-    val error: LiveData<String> = _error
-
     init {
         /* Prepare the downloader by initializing */
         viewModelScope.launch(Dispatchers.IO) {
             downloader.init()
-            _downloaderReady.postValue(true)
         }
     }
 
@@ -40,19 +34,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
      * Download an audio track by URL
      */
     fun download(url: String) {
-        /* Do not overlap downloads */
-        if (downloader.isBusy.value == true)
+        if (downloader.state.value != DownloaderState.READY)
             return
 
         viewModelScope.launch(Dispatchers.IO) {
             wakelock.acquire(WAKELOCK_TIMEOUT)
-
-            /* Download the track and post errors if they occur */
-            downloader.downloadAudio(url)?.let {
-                _error.postValue(it)
-                _downloaderReady.postValue(false)
-            }
-
+            downloader.downloadAudio(url)
             wakelock.release()
         }
     }

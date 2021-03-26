@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">Trackophile</string>
 
-    <string name="default_title">Processing</string>
-    <string name="default_uploader">Just a moment…</string>
+    <string name="state_initializing">Initializing downloader</string>
+    <string name="state_ready">Ready to begin</string>
+    <string name="state_processing">Processing metadata</string>
+    <string name="state_downloading">Downloading</string>
+    <string name="state_completed">Finished</string>
 
-    <string name="first_launch_title">Initializing Downloader</string>
-    <string name="first_launch_uploader">Subsequent launches will be quicker</string>
-
-    <string name="error">Whoops, an exception occurred!</string>
     <string name="thumbnail">Thumbnail</string>
-
-    <string name="oom">Low on memory, download may be too large!</string>
 </resources>
