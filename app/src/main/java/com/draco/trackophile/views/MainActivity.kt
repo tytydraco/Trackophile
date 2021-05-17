@@ -44,10 +44,7 @@ class MainActivity : AppCompatActivity() {
             when (it!!) {
                 DownloaderState.INITIALIZING -> R.string.state_initializing
                 DownloaderState.READY -> {
-                    intent?.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
-                        viewModel.download(url)
-                        intent = null
-                    }
+                    downloadFromIntent()
                     R.string.state_ready
                 }
                 DownloaderState.PROCESSING -> R.string.state_processing
@@ -60,6 +57,16 @@ class MainActivity : AppCompatActivity() {
             }.also { resId ->
                 status.setText(resId)
             }
+        }
+    }
+
+    /**
+     * Take the provided intent and extract relevant download information
+     */
+    private fun downloadFromIntent() {
+        intent?.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
+            viewModel.download(url)
+            intent = null
         }
     }
 }
