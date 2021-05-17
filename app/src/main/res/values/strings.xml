@@ -5,6 +5,7 @@
     <string name="state_ready">Ready to begin</string>
     <string name="state_processing">Processing metadata</string>
     <string name="state_downloading">Downloading</string>
+    <string name="state_finalizing">Finalizing</string>
     <string name="state_completed">Finished</string>
 
     <string name="thumbnail">Thumbnail</string>

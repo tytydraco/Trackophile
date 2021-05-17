@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.draco.trackophile.R
-import com.draco.trackophile.models.DownloaderState
+import com.draco.trackophile.repositories.constants.DownloaderState
 import com.draco.trackophile.viewmodels.MainActivityViewModel
 import kotlin.math.roundToInt
 
@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 DownloaderState.PROCESSING -> R.string.state_processing
                 DownloaderState.DOWNLOADING -> R.string.state_downloading
+                DownloaderState.FINALIZING -> R.string.state_finalizing
                 DownloaderState.COMPLETED -> {
                     finishAffinity()
                     R.string.state_completed
