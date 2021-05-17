@@ -11,7 +11,6 @@ import com.yausername.ffmpeg.FFmpeg
 import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLException
 import com.yausername.youtubedl_android.YoutubeDLRequest
-import java.io.File
 import java.io.FileFilter
 import java.nio.file.Files
 
@@ -112,7 +111,11 @@ class Downloader(private val context: Context) {
         val contentResolver = context.contentResolver
 
         /* Get a list of all tracks */
-        val fileList = downloadsFolder.listFiles()!!
+        val fileList = downloadsFolder.listFiles(
+            FileFilter {
+                it.extension == AUDIO_FORMAT
+            }
+        )!!
 
         /* Where we should put the audio */
         val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
@@ -145,7 +148,7 @@ class Downloader(private val context: Context) {
             _downloadProgress.postValue(progress)
         }
 
-        /* Tell user we are done */
-        _state.postValue(DownloaderState.COMPLETED)
+        /* Clean up invalid files as well */
+        downloadsFolder.deleteRecursively()
     }
 }

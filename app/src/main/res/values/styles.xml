@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="TextAppearance.Track.Title" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textAlignment">center</item>
-        <item name="android:layout_marginVertical">12dp</item>
-        <item name="android:layout_marginHorizontal">24dp</item>
-    </style>
-</resources>

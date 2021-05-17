@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">Trackophile</string>
 
-    <string name="state_initializing">Initializing downloader</string>
-    <string name="state_ready">Ready to begin</string>
+    <string name="state_initializing">Initializing</string>
+    <string name="state_ready">Ready</string>
     <string name="state_processing">Processing metadata</string>
     <string name="state_downloading">Downloading</string>
-    <string name="state_finalizing">Finalizing</string>
+    <string name="state_finalizing">Storing</string>
     <string name="state_completed">Finished</string>
 
-    <string name="thumbnail">Thumbnail</string>
+    <string name="notif_channel_id">DownloadChannel</string>
+    <string name="notif_channel_title">Download</string>
+    <string name="notif_title">Download</string>
 </resources>
