@@ -2,6 +2,7 @@ package com.draco.trackophile.utils
 
 import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
@@ -16,14 +17,7 @@ import java.nio.file.Files
 
 class Downloader(private val context: Context) {
     companion object {
-        /**
-         * Audio format extension
-         */
         const val AUDIO_FORMAT = "mp3"
-
-        /**
-         * YouTubeDL recognizable output format (appended to output location)
-         */
         const val OUTPUT_FORMAT = "%(title)s ~ %(id)s.%(ext)s"
     }
 
@@ -96,6 +90,14 @@ class Downloader(private val context: Context) {
         }
     }
 
+    private fun getMediaStoreLocation(): Uri? {
+        /* Where we should put the audio */
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        else
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    }
+
     /**
      * Update Android MediaStore entries for downloaded tracks
      *
@@ -117,19 +119,14 @@ class Downloader(private val context: Context) {
             }
         )!!
 
-        /* Where we should put the audio */
-        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        else
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-
+        val collection = getMediaStoreLocation() ?: return
         /* Iterate over each one and write their contents to MediaStore URIs */
         for (index in fileList.indices) {
             val file = fileList[index]
 
             /* Don't worry; Android will handle metadata */
             val songContentValues = ContentValues().apply {
-                put(MediaStore.Audio.Media.DISPLAY_NAME, file.nameWithoutExtension)
+                put(MediaStore.MediaColumns.DISPLAY_NAME, file.nameWithoutExtension)
             }
 
             /* Copy contents over to new URI */
