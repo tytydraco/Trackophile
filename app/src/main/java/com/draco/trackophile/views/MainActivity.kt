@@ -2,6 +2,7 @@ package com.draco.trackophile.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -32,31 +33,31 @@ class MainActivity : AppCompatActivity() {
 
         /* Report error messages */
         viewModel.downloader.error.observe(this) {
-            if (it != null)
+            if (it != null) {
+                progress.visibility = View.GONE
                 status.text = it
+            }
         }
 
         /* Handle downloader states */
         viewModel.downloader.state.observe(this) {
             when (it!!) {
-                DownloaderState.INITIALIZING -> status.setText(R.string.state_initializing)
-
+                DownloaderState.INITIALIZING -> R.string.state_initializing
                 DownloaderState.READY -> {
-                    status.setText(R.string.state_ready)
                     intent?.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
                         viewModel.download(url)
                         intent = null
                     }
+                    R.string.state_ready
                 }
-
-                DownloaderState.PROCESSING -> status.setText(R.string.state_processing)
-
-                DownloaderState.DOWNLOADING -> status.setText(R.string.state_downloading)
-
+                DownloaderState.PROCESSING -> R.string.state_processing
+                DownloaderState.DOWNLOADING -> R.string.state_downloading
                 DownloaderState.COMPLETED -> {
-                    status.setText(R.string.state_completed)
                     finishAffinity()
+                    R.string.state_completed
                 }
+            }.also { resId ->
+                status.setText(resId)
             }
         }
     }

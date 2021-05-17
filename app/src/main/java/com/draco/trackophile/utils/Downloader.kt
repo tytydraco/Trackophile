@@ -61,15 +61,19 @@ class Downloader(private val context: Context) {
     private val archive = File("${archivesFolder.absolutePath}/archive.txt")
 
     fun init() {
-        /* Prepare essential libraries */
-        youtubeDL.init(context)
-        ffmpeg.init(context)
+        try {
+            /* Prepare essential libraries */
+            youtubeDL.init(context)
+            ffmpeg.init(context)
 
-        /* Update via internet */
-        youtubeDL.updateYoutubeDL(context)
+            /* Update via internet */
+            youtubeDL.updateYoutubeDL(context)
 
-        /* We're ready to handle requests now! */
-        _state.postValue(DownloaderState.READY)
+            /* We're ready to handle requests now! */
+            _state.postValue(DownloaderState.READY)
+        } catch (e: YoutubeDLException) {
+            _error.postValue(e.message)
+        }
     }
 
     /**

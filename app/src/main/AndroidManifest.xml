@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Trackophile"
         android:extractNativeLibs="true"
         android:largeHeap="true">
-        <activity android:name="com.draco.trackophile.views.MainActivity"
+        <activity android:name=".views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
